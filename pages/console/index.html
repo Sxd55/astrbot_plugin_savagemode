@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Savage Mode</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="topbar">
+    <div class="container topbar-inner">
+      <span class="logo">Savage Mode</span>
+      <div class="topbar-meta">
+        <span class="badge" id="badge-version">v—</span>
+        <span class="dot">·</span>
+        <span class="badge" id="badge-switch">—</span>
+        <span class="dot">·</span>
+        <span class="badge" id="badge-tokens">—</span>
+        <span class="dot">·</span>
+        <span class="badge" id="badge-cache">—</span>
+        <button class="link-btn label" id="btn-reload">刷新</button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <header class="section hero container">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1 class="hero-title">Savage&nbsp;Mode</h1>
+          <p class="hero-sub">
+            把长期稳定的系统提示词——角色设定、行为规则、输出格式与红线——注入
+            <span class="italic-quiet">system prompt</span>。
+          </p>
+          <p class="italic-quiet">只放不会每轮变化的内容；时间、记忆、好感度交给别的插件。</p>
+        </div>
+        <figure class="hero-figure">
+          <img src="logo.png" alt="Savage Mode" />
+        </figure>
+      </div>
+    </header>
+
+    <section class="section container" id="sec-settings">
+      <div class="section-grid">
+        <div class="section-head">
+          <h2 class="section-title">基础设置</h2>
+          <p class="label">开关 · 位置 · 平台 · 包裹 · 基础文本</p>
+        </div>
+        <div class="section-body">
+          <div class="field-grid">
+            <label class="check-line span-6">
+              <input type="checkbox" id="set-enabled" />
+              <span>总开关</span>
+            </label>
+            <label class="field span-6">
+              <span class="label">注入位置</span>
+              <span class="select-line">
+                <select id="set-position">
+                  <option value="prepend">前置 · 规则优先</option>
+                  <option value="append">追加 · 置于末尾</option>
+                </select>
+              </span>
+            </label>
+            <label class="field-float span-6">
+              <input type="text" id="set-platforms" placeholder=" " />
+              <span>生效平台</span>
+            </label>
+            <label class="field-float span-6">
+              <input type="text" id="set-tag" placeholder=" " />
+              <span>包裹标签</span>
+            </label>
+            <label class="check-line span-6">
+              <input type="checkbox" id="set-debug" />
+              <span>调试日志</span>
+            </label>
+            <label class="field-float span-12">
+              <textarea id="set-base" rows="3" placeholder=" "></textarea>
+              <span>基础文本 · 可选，排在块库之前</span>
+            </label>
+          </div>
+          <div class="actions">
+            <button class="btn" id="btn-save-settings">保存设置</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="sec-blocks">
+      <div class="section-grid">
+        <div class="section-head">
+          <h2 class="section-title">块库</h2>
+          <p class="label" id="blocks-hint">按顺序拼接注入 · 用 ↑↓ 调序</p>
+        </div>
+        <div class="section-body">
+          <div id="blocks" class="entries"></div>
+          <div class="actions">
+            <button class="btn ghost" id="btn-add">+ 新增块</button>
+            <button class="btn" id="btn-save-blocks">保存块库</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="sec-preview">
+      <div class="section-grid">
+        <div class="section-head">
+          <h2 class="section-title">实时预览</h2>
+          <p class="label" id="preview-meta">—</p>
+        </div>
+        <div class="section-body">
+          <pre class="preview" id="preview">（空）</pre>
+          <dl class="stat-list">
+            <div><dt>本块字数</dt><dd id="stat-chars">0</dd></div>
+            <div><dt>本块预估 tokens</dt><dd id="stat-tokens">0</dd></div>
+            <div><dt>上次请求 system prompt</dt><dd id="stat-last">0</dd></div>
+            <div><dt>本块占比</dt><dd id="stat-ratio">—</dd></div>
+          </dl>
+          <details class="detail">
+            <summary class="link-btn">分段明细</summary>
+            <table class="table" id="parts"></table>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="container">
+      <span class="logo">Savage Mode</span>
+      <p class="label" id="foot-path"></p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>

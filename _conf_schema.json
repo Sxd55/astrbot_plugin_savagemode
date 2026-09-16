@@ -1,0 +1,39 @@
+{
+  "enabled": {
+    "description": "总开关",
+    "type": "bool",
+    "hint": "关闭后不注入任何内容，并会清掉本插件上一版注入的残留。块库编辑请到插件页的 Savage Mode 面板。",
+    "default": true
+  },
+  "position": {
+    "description": "注入位置",
+    "type": "string",
+    "options": ["prepend", "append"],
+    "hint": "prepend=放在系统提示词最前面（规则优先）；append=追加到末尾。本块每次变更会让其之后的内容缓存失效：前置影响整段，追加只影响尾部。",
+    "default": "prepend"
+  },
+  "l0_text": {
+    "description": "基础文本（可选）",
+    "type": "text",
+    "hint": "排在块库之前的单段文本，一般留空、内容都放面板的块库里。禁止写当前时间、用户名、好感度、记忆片段等每轮变化的内容——会破坏提示词缓存（官方文档：成本约涨 7–20 倍）。本插件不提供模板变量。",
+    "default": ""
+  },
+  "platforms": {
+    "description": "生效平台",
+    "type": "list",
+    "hint": "留空=全部平台。填适配器名，如 aiocqhttp、telegram、webchat（与 /savagemode status 显示的平台名一致）。",
+    "default": []
+  },
+  "wrap_tag": {
+    "description": "包裹标签",
+    "type": "string",
+    "hint": "用 <标签>…</标签> 包住全部正文，便于模型区分「这是规则」。只允许字母、数字、下划线与减号，最长 24；留空则不包裹。",
+    "default": "rules"
+  },
+  "debug_log": {
+    "description": "调试日志",
+    "type": "bool",
+    "hint": "开启后每次注入/跳过都会写一条日志（含块长度与指纹），排查用。",
+    "default": false
+  }
+}
