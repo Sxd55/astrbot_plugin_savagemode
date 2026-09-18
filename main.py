@@ -270,6 +270,11 @@ class SavageModePlugin(Star):
         saver = getattr(self.config, "save_config", None)
         if callable(saver):
             saver()
+        elif hasattr(self.context, "save_config") and callable(self.context.save_config):
+            try:
+                self.context.save_config()
+            except Exception:
+                pass
         return json_response(self._state_payload(self._options(), self._blocks()))
 
     # ---- 指令 -------------------------------------------------------

@@ -15,6 +15,10 @@ from dataclasses import dataclass, field
 
 MARKER_TEMPLATE = "<!-- savage-mode:L0:v{fp} -->"
 MARKER_RE = re.compile(r"<!--\s*savage-mode:L0:v[0-9a-f]{0,12}\s*-->\s*", re.IGNORECASE)
+MARKER_BLOCK_RE = re.compile(
+    r"<!--\s*savage-mode:L0:v[0-9a-f]{0,12}\s*-->\s*(?:<([A-Za-z][A-Za-z0-9_-]{0,23})>[\s\S]*?</\1>\s*)?",
+    re.IGNORECASE,
+)
 POSITIONS = ("prepend", "append")
 _TAG_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_-]{0,23}$")
 
@@ -22,6 +26,7 @@ MAX_BLOCKS = 50
 MAX_BLOCK_CHARS = 20000
 MAX_TOTAL_CHARS = 60000
 MAX_TITLE_CHARS = 40
+MAX_SESSIONS = 500
 
 _CJK_RANGES = ((0x3040, 0x30FF), (0x4E00, 0x9FFF), (0xAC00, 0xD7AF))
 
@@ -211,6 +216,8 @@ def strip_previous(system_prompt: str, known_bodies: tuple[str, ...] = ()) -> st
     for body in known_bodies:
         if body and body in text:
             text = text.replace(body, "")
+    # 先用组合正则匹配标记及紧随其后的整个标签包裹块（防机器人重启后无 known_bodies 残留旧标签）
+    text = MARKER_BLOCK_RE.sub("", text)
     text = MARKER_RE.sub("", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
@@ -281,8 +288,13 @@ class ModeState:
     last_bodies: dict[str, str] = field(default_factory=dict)
     last_umo: str = ""
     limit: int = 12
+    max_sessions: int = MAX_SESSIONS
 
     def remember(self, record: InjectionRecord, block: str) -> None:
+        if record.umo not in self.records and len(self.records) >= self.max_sessions:
+            oldest_umo = next(iter(self.records))
+            self.records.pop(oldest_umo, None)
+            self.last_bodies.pop(oldest_umo, None)
         items = self.records.setdefault(record.umo, [])
         items.append(record)
         del items[: max(0, len(items) - self.limit)]

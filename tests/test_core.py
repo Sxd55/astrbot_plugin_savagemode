@@ -215,6 +215,13 @@ class InjectTest(unittest.TestCase):
         self.assertEqual(once, twice)
         self.assertEqual(len(MARKER_RE.findall(twice)), 1)
 
+    def test_strip_previous_without_known_bodies(self):
+        # 模拟重启后 known_bodies 为空的情形
+        block = build_block(opts(), "", blocks("规则一"))
+        injected = inject("框架人格", block, "prepend")
+        cleaned = strip_previous(injected, known_bodies=())
+        self.assertEqual(cleaned, "框架人格")
+
     def test_old_body_replaced(self):
         old = build_block(opts(), "", blocks("旧规则"))
         with_old = inject("框架", old, "prepend")
@@ -270,6 +277,15 @@ class StateTest(unittest.TestCase):
         state.remember(InjectionRecord(0.0, "umo", "webchat", "", "", 0), block)
         self.assertEqual(state.known_bodies("umo"), (block,))
         self.assertEqual(state.known_bodies("other"), ())
+
+    def test_max_sessions_eviction(self):
+        state = ModeState(max_sessions=5)
+        for i in range(10):
+            rec = InjectionRecord(0.0, f"umo_{i}", "webchat", "", "", 0)
+            state.remember(rec, f"block_{i}")
+        self.assertEqual(len(state.records), 5)
+        self.assertNotIn("umo_0", state.records)
+        self.assertIn("umo_9", state.records)
 
 
 class StatusTest(unittest.TestCase):
