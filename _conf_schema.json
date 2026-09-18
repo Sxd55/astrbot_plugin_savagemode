@@ -9,6 +9,7 @@
     "description": "注入位置",
     "type": "string",
     "options": ["prepend", "append"],
+    "labels": ["置顶优先（放在提示词最前，规则强约束）", "尾部追加（放在末尾，保护前置Prompt缓存）"],
     "hint": "prepend=放在系统提示词最前面（规则优先）；append=追加到末尾。本块每次变更会让其之后的内容缓存失效：前置影响整段，追加只影响尾部。",
     "default": "prepend"
   },
@@ -21,7 +22,10 @@
   "platforms": {
     "description": "生效平台",
     "type": "list",
-    "hint": "留空=全部平台。填适配器名，如 aiocqhttp、telegram、webchat（与 /savagemode status 显示的平台名一致）。",
+    "items": {"type": "string"},
+    "options": ["aiocqhttp", "nakuru", "telegram", "discord", "webchat", "lark"],
+    "labels": ["QQ(aiocqhttp/NapCat)", "QQ(nakuru)", "Telegram", "Discord", "网页聊天(webchat)", "飞书(lark)"],
+    "hint": "留空=全部平台。也可从下拉菜单中勾选特定生效平台。",
     "default": []
   },
   "wrap_tag": {
