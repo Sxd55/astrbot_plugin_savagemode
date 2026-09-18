@@ -1,11 +1,11 @@
-# Savage Mode 实机验收（v0.2.0）
+# Savage Mode 实机验收（v0.2.1）
 
 前置：AstrBot ≥ 4.27。每步都有明确期望，能被证伪。
 
 ## 0. 安装与加载
 
 1. 目录放进 `data/plugins/astrbot_plugin_savagemode/` → 重载插件（或重启）。
-2. 日志期望：`Savage Mode (L0) loaded v0.2.0`。
+2. 日志期望：`Savage Mode (L0) loaded v0.2.1`。
 3. 插件列表里应显示 **Savage Mode** 与头像图标（metadata 的 `display_name` 与 `logo.png`）。
 
 ## 1. 面板能用

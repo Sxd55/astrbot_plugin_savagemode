@@ -2,6 +2,6 @@ name: astrbot_plugin_savagemode
 display_name: Savage Mode
 desc: 把长期稳定的角色设定与规则注入系统提示词；可视块库、缓存友好、幂等注入、可预览、可自检。
 short_desc: L0 稳定系统提示词 · 可视块库
-version: v0.2.0
+version: v0.2.1
 author: Sxd55
 astrbot_version: ">=4.27,<5"
